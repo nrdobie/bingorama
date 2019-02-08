@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "module": "commonjs",
+    "target": "es2015",
+    "types": ["jest", "jest-extended", "node"]
+  }
+}
