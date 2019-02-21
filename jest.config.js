@@ -17,7 +17,7 @@ module.exports = {
   errorOnDeprecated: true,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   setupFiles: [],
-  setupTestFrameworkScriptFile: `${__dirname}/jest/setup.ts`,
-  testMatch: ['src/__tests__/**/*.ts?(x)'],
+  setupFilesAfterEnv: [`${__dirname}/jest/setup.ts`],
+  testMatch: ['**/__tests__/**/*.ts'],
   testPathIgnorePatterns: ['/node_modules/']
 }

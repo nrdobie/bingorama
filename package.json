@@ -9,7 +9,7 @@
   "private": true,
   "workspaces": [
     "deployables/*",
-    "packages/*"
+    "packages/@bingorama/*"
   ],
   "scripts": {
     "preinstall": "npx use-yarn",
