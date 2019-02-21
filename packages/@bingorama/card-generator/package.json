@@ -19,7 +19,7 @@
     "start": "run-p watch:*",
     "test": "jest",
     "test:open-report": "opn ./coverage/lcov-report/index.html",
-    "docs": "typedoc && open docs/index.html",
+    "docs": "typedoc && opn docs/index.html",
     "ci:build": "run-p build:*",
     "ci:docs": "typedoc",
     "ci:test": "jest --coverage"
@@ -28,7 +28,13 @@
     "seed-random": "^2.2.0"
   },
   "devDependencies": {
+    "@types/benchmark": "^1.0.31",
+    "@types/cli-progress": "^1.8.0",
+    "@types/cli-table": "^0.3.0",
     "@types/seed-random": "^2.2.0",
+    "benchmark": "^2.1.4",
+    "cli-progress": "^2.1.1",
+    "cli-table": "^0.3.1",
     "ts-node": "^8.0.2"
   }
 }

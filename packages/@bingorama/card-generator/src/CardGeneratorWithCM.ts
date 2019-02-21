@@ -1,5 +1,6 @@
 import { performance } from 'perf_hooks'
 import * as createSeed from 'seed-random'
+import { ClassicMatcher } from './ClassicMatcher'
 import { Card, Seed } from './types'
 import { compareArrays } from './utilities/compareArrays'
 import { getRandomInt } from './utilities/getRandomInt'
@@ -42,7 +43,7 @@ export interface ICardGeneratorOptions {
 /**
  * Generates bingo card
  */
-export class CardGenerator {
+export class CardGeneratorWithCM {
   /**
    * Default options for generating cards
    */
@@ -60,9 +61,11 @@ export class CardGenerator {
    */
   public options: ICardGeneratorOptions
 
+  private cm = new ClassicMatcher()
+
   constructor(options: Partial<ICardGeneratorOptions> = {}) {
     this.options = {
-      ...CardGenerator.DEFAULT_OPTIONS,
+      ...CardGeneratorWithCM.DEFAULT_OPTIONS,
       ...options
     }
   }
@@ -85,10 +88,7 @@ export class CardGenerator {
     while (cards.length < count) {
       const card = await this.generateCard(seed)
 
-      if (
-        this.options.allowDuplicates ||
-        !cards.some(a => this.classicMatch(a, card))
-      ) {
+      if (this.options.allowDuplicates || !this.cm.checkCard(card)) {
         runningDuplicates = 0
         cards.push(card)
 
@@ -132,55 +132,6 @@ export class CardGenerator {
 
       setTimeout(() => resolve(card as Card), 0)
     })
-  }
-
-  /**
-   * Checks if two cards can trigger double bingo with classic bingo rules
-   * @param a Card A
-   * @param b Card B
-   */
-  public classicMatch(a: Card, b: Card): boolean {
-    // Check for direct match
-    if (compareArrays(a, b)) {
-      return true
-    }
-
-    // Check for column match
-    for (let i = 0; i < 5; i++) {
-      const start = i * 5
-      const end = start + 5
-
-      if (compareArrays(a.slice(start, end), b.slice(start, end))) {
-        return true
-      }
-    }
-
-    // Check for row match
-    for (let i = 0; i < 5; i++) {
-      const aList = [a[i], a[i + 5], a[i + 10], a[i + 15], a[i + 20]]
-      const bList = [b[i], b[i + 5], b[i + 10], b[i + 15], b[i + 20]]
-
-      if (compareArrays(aList, bList)) {
-        return true
-      }
-    }
-
-    // Check for diagonals
-    const aListDiagonalRight = [a[0], a[6], a[12], a[18], a[24]]
-    const bListDiagonalRight = [b[0], b[6], b[12], b[18], b[24]]
-
-    if (compareArrays(aListDiagonalRight, bListDiagonalRight)) {
-      return true
-    }
-
-    const aListDiagonalLeft = [a[4], a[8], a[12], a[16], a[20]]
-    const bListDiagonalLeft = [b[4], b[8], b[12], b[16], b[20]]
-
-    if (compareArrays(aListDiagonalLeft, bListDiagonalLeft)) {
-      return true
-    }
-
-    return false
   }
 
   /**
